@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# SHHリモートログイン時はこれを利用
+# SSHリモートログイン時はこれを利用
 import matplotlib
 matplotlib.use("Agg")
 
