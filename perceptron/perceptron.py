@@ -8,42 +8,65 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def g(X, W):
-    return W[0] + X * W[1]
+    v = 0
+    for i in range(len(W)):
+        v += W[i] * X[i]
+    return v
     
 if __name__ == '__main__':
     
-    X = [[1.2, 1], [0.2, 1], [-0.2, 1],
-        [-0.5, 2], [-1.0, 2], [-1.5, 2]]
+    # 初期値
+    # X : [x1, x2, class]
+    X = [[1.0, 1.2, 1], [1.0, 0.2, 1], [1.0, -0.2, 1],
+        [1.0, -0.5, 2], [1.0, -1.0, 2], [1.0, -1.5, 2]]
     W = [-5.0, 5.0] #W0, W1
-    row = 0.3
+    W_copy = list(W)
+    row = 5.5
+    canContinue = True
     
-    for i in range(len(X)):
-        g_value = g(X[i][0], W)
-        print(str(X[i]) + ":" + str(W) + ":" + str(g_value))
-        if g_value < 0 and X[i][1] == 1:
-            print("1→2")
+    
+    plt.scatter(W[1], W[0], c = 'blue')
+    
+    
+    while canContinue:
+        canContinue = False
+        for i in range(len(X)):
             
-        elif g_value > 0 and X[i][1] == 2:
-            print("2→1")
-        
-        
-        
-        
+            g_value = g(X[i], W)
+            print(str(X[i]) + ":" + str(W) + ":" + str(g_value))
+            if g_value < 0 and X[i][2] == 1:
+                print("1→2")
+                W[0] = W[0] + row * X[i][0]
+                W[1] = W[1] + row * X[i][1]
+                canContinue = True
+                plt.scatter(W[1], W[0], c = 'red', marker = "o")
+                print(W)
+                print(W_copy)
+                plt.plot([W_copy[1], W[1]], [W_copy[0], W[0]], color="red")
+                W_copy = list(W)
+            elif g_value > 0 and X[i][2] == 2:
+                print("2→1")
+                W[0] = W[0] - row * X[i][0]
+                W[1] = W[1] - row * X[i][1]
+                canContinue = True
+                plt.scatter(W[1], W[0], c = 'red', marker = "o")
+                plt.plot([W_copy[1], W[1]], [W_copy[0], W[0]], color="red")
+                W_copy = list(W)
     
-    x = np.linspace(-5, 15)
-    A = x
-    plt.plot(x, A, color="green", linewidth=1.0, linestyle="-", label="x")
-    plt.legend(loc='upper left')
+    # 解領域の表示
+    w1 = x = np.linspace(-3, 13)
+    for i in range(len(X)):
+        if X[i][2] == 1:
+            w0 = -X[i][1] * w1 
+            color = '#ffff00'
+        elif X[i][2] == 2:
+            w0 = -X[i][1] * w1
+            color = '#00ff00'
+        plt.plot(w1, w0, color, linewidth=1.0, linestyle="-")
     
     
     
-    plt.scatter(W[1], W[0], c = 'red', marker = "o")
-    
-    
-    
-    # メモリの設定
-    plt.xticks([-5, 0, +5, +10, +15])
-    plt.yticks([-5, 0, +5, +10, +15])
+    # plt.scatter(6, -3, c = 'red', marker = "o")
     
     # xy軸(spine)の移動
     ax = plt.gca()  # gca stands for 'get current axis'
@@ -56,6 +79,7 @@ if __name__ == '__main__':
     ax.set_title('perceptron')
     ax.set_xlabel('w1')
     ax.set_ylabel('w0')
+    ax.grid(True) #補助線
     
     # グラフとメモリの被りを半透明化
     for label in ax.get_xticklabels() + ax.get_yticklabels():
