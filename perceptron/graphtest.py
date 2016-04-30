@@ -55,4 +55,4 @@ for label in ax.get_xticklabels() + ax.get_yticklabels():
     label.set_fontsize(16)
     label.set_bbox(dict(facecolor='white', edgecolor='None', alpha=0.65))
 
-plt.savefig("graph.png") #CUIでshowは使えない
+plt.savefig("graphtest.png") #CUIでshowは使えない
