@@ -7,7 +7,7 @@ matplotlib.use("Agg")
 import numpy as np
 import matplotlib.pyplot as plt
 
-def matplotConfig():
+def matplotConfig(filename):
     # xy軸(spine)の移動
     ax = plt.gca()  # gca stands for 'get current axis'
     ax.spines['right'].set_color('none')
@@ -16,7 +16,7 @@ def matplotConfig():
     ax.spines['bottom'].set_position(('data',0))
     ax.yaxis.set_ticks_position('left')
     ax.spines['left'].set_position(('data',0))
-    ax.set_title('perceptron')
+    ax.set_title(filename)
     ax.set_xlabel('w1')
     ax.set_ylabel('w0')
     ax.grid(True) #補助線
@@ -35,12 +35,13 @@ def g(X, W):
 if __name__ == '__main__':
     
     # 初期値
-    # X : [x1, x2, class]
     X = [[1.0, 1.2, 1], [1.0, 0.2, 1], [1.0, -0.2, 1],
         [1.0, -0.5, 2], [1.0, -1.0, 2], [1.0, -1.5, 2]]
-    W = [-16.0, -3.0] #W0, W1
+    W = [-7.0, 2.0] #W0, W1
+    row = 3.6
+    filename = "(" + str(W[1]) + "," + str(W[0]) + "," + str(row) + ").png"
+    
     W_copy = list(W)
-    row = 1.5
     canContinue = True
     
     plt.scatter(W[1], W[0], c = 'blue', marker = "o")
@@ -78,7 +79,7 @@ if __name__ == '__main__':
         w0 = -X[i][1] * w1
         plt.plot(w1, w0, color, linewidth=1.0, linestyle="-")
     
-    matplotConfig()
+    matplotConfig(filename)
     
-    plt.savefig("graph.png") #CUIでshowは使えない
+    plt.savefig(filename) #CUIでshowは使えない
 
