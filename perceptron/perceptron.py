@@ -4,23 +4,19 @@
 import matplotlib
 matplotlib.use("Agg")
 
+import sys
+sys.path.append("../mylibrary")
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotConfig
-
-# 識別関数
-def g(X, W):
-    v = 0
-    for i in range(len(W)):
-        v += W[i] * X[i]
-    return v
+import mathfunction
 
 # 識別関数の描画
 def showGfunction(color):
     x = np.linspace(-2.5, 2.5)
     y = W[0] + x * W[1]
     plt.plot(x, y, c=color, linewidth=1.0, linestyle="-")
-    
     
 # 重み空間表示
 def showWeightSpace(X, W, row):
@@ -36,7 +32,7 @@ def showWeightSpace(X, W, row):
         canContinue = False
         for i in range(len(X)):
             
-            g_value = g(X[i], W)
+            g_value = mathfunction.g(X[i], W)
             print(str(X[i]) + ":" + str(W) + ":" + str(g_value))
             if g_value < 0 and X[i][2] == 1:
                 print("1→2")
@@ -87,7 +83,7 @@ def showFeatureSpace(X, W , row):
         canContinue = False
         for i in range(len(X)):
             
-            g_value = g(X[i], W)
+            g_value = mathfunction.g(X[i], W)
             print(str(X[i]) + ":" + str(W) + ":" + str(g_value))
             
             if g_value < 0 and X[i][2] == 1:
