@@ -29,7 +29,9 @@ def forFeature(filename):
     ax.xaxis.set_ticks_position('bottom')
     ax.spines['bottom'].set_position(('data',0))
     ax.yaxis.set_ticks_position('left')
-    ax.spines['left'].set_position(('data',0))
+    ax.spines['left'].set_position(('data',-2))
+    # ax.spines['left'].set_color('none')
+    
     ax.set_title(filename)
     ax.set_xlabel('X')
     ax.set_ylabel('g(X)')
