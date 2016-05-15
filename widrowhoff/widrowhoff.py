@@ -27,8 +27,11 @@ def showG1minusG2function(color, label):
 # 特徴空間表示
 def widrhohoff(X, W , rho):
     
+    epoch = 10
+    filename = "linearlyseparable.png"
+    
     plt.figure()
-    filename = "featurespace.png"
+    plt.text(0, -20, "epoch=" + str(epoch), ha = 'center', va = 'bottom', size = 'xx-large')
     
     for i in range(len(X)):
         if X[i][2] == 1:
@@ -38,7 +41,7 @@ def widrhohoff(X, W , rho):
     
     showG1minusG2function("blue", "start")
     
-    for i in range(10):
+    for i in range(epoch):
         print("---"+ str(i+1) + "th---")
         
         total_epsilon = 0
@@ -91,6 +94,8 @@ if __name__ == '__main__':
     # 初期値
     X = [[1.0, 1.2, 1], [1.0, 0.2, 1], [1.0, -0.2, 1],
         [1.0, -0.5, 2], [1.0, -1.0, 2], [1.0, -1.5, 2]]
+    # X = [[1.0, 1.2, 1], [1.0, 0.2, 1], [1.0, -0.2, 1],
+    #     [1.0, 0.5, 2], [1.0, -0.5, 2], [1.0, -1.0, 2], [1.0, -1.5, 2]]
         
     W = [[-7.0, 2.0], [6.0, 3.0]] #W0, W1
     rho = 0.1
