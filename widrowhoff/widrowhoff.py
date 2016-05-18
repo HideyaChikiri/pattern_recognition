@@ -25,9 +25,9 @@ def showG1minusG2function(color, label):
     
 
 # 特徴空間表示
-def widrhohoff():
+def widrowhoff():
     
-    # classSize = 
+    classSize = len(B)
     epoch = 10
     filename = "linearlyseparable.png"
     
@@ -50,40 +50,34 @@ def widrhohoff():
         for p in range(len(X)):
             
             g = []
-            # for()
+            for c in range(classSize):
+                g.append(mathfunction.g(X[p], W[c]))
             
-            g1 = mathfunction.g(X[p], W[0])
-            g2 = mathfunction.g(X[p], W[1])
-
             if X[p][2] == 1:
                 
-                epsilon1 = g1 - B[0][0]
-                W[0][0] -= rho * X[p][0] * epsilon1
-                W[0][1] -= rho * X[p][1] * epsilon1
-
-                epsilon2 = g2 - B[0][1]
-                W[1][0] -= rho * X[p][0] * epsilon2
-                W[1][1] -= rho * X[p][1] * epsilon2
-                
-                
-                
-                print("Xp:" + str(p) + " g:[" + str(g1) + "," + str(g2) 
+                epsilon = []
+                for w_index in range(len(W)):
+                    epsilon.append(g[w_index] - B[0][w_index])
+                    W[w_index][0] -= rho * X[p][0] * epsilon[w_index]
+                    W[w_index][1] -= rho * X[p][1] * epsilon[w_index]
+                    
+                print("Xp:" + str(p) + " g:[" + str(g[0]) + "," + str(g[1]) 
                 + "] B:[" + str(B[0][0]) + "," + str(B[0][1]) + "] e:["
-                + str(epsilon1) + "," + str(epsilon2) + "]")
-                total_epsilon += math.fabs(epsilon1) + math.fabs(epsilon2)
+                + str(epsilon[0]) + "," + str(epsilon[1]) + "]")
+                total_epsilon += math.fabs(epsilon[0]) + math.fabs(epsilon[1])
 
             elif X[p][2] == 2:
-                epsilon1 = g1 - B[1][0]
-                W[0][0] -= rho * X[p][0] * epsilon1
-                W[0][1] -= rho * X[p][1] * epsilon1
-
-                epsilon2 = g2 - B[1][1]
-                W[1][0] -= rho * X[p][0] * epsilon2
-                W[1][1] -= rho * X[p][1] * epsilon2
-                print("Xp:" + str(p) + " g:[" + str(g1) + "," + str(g2) 
+                
+                epsilon = []
+                for w_index in range(len(W)):
+                    epsilon.append(g[w_index] - B[1][w_index])
+                    W[w_index][0] -= rho * X[p][0] * epsilon[w_index]
+                    W[w_index][1] -= rho * X[p][1] * epsilon[w_index]
+                
+                print("Xp:" + str(p) + " g:[" + str(g[0]) + "," + str(g[1]) 
                 + "] B:[" + str(B[1][0]) + "," + str(B[1][1]) + "] e:["
-                + str(epsilon1) + "," + str(epsilon2) + "]")
-                total_epsilon += math.fabs(epsilon1) + math.fabs(epsilon2)
+                + str(epsilon[0]) + "," + str(epsilon[1]) + "]")
+                total_epsilon += math.fabs(epsilon[0]) + math.fabs(epsilon[1])
 
                 
         print("total_e:" + str(total_epsilon))
@@ -109,5 +103,5 @@ if __name__ == '__main__':
     # 教師ベクトル
     B = [[1, 0], [0, 1]]
     
-    widrhohoff()
+    widrowhoff()
     
