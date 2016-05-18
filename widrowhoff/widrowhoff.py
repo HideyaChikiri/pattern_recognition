@@ -56,28 +56,33 @@ def widrowhoff():
             if X[p][2] == 1:
                 
                 epsilon = []
-                for w_index in range(len(W)):
-                    epsilon.append(g[w_index] - B[0][w_index])
-                    W[w_index][0] -= rho * X[p][0] * epsilon[w_index]
-                    W[w_index][1] -= rho * X[p][1] * epsilon[w_index]
+                for w_c in range(classSize):
+                    epsilon.append(g[w_c] - B[0][w_c])
+                    W[w_c][0] -= rho * X[p][0] * epsilon[w_c]
+                    W[w_c][1] -= rho * X[p][1] * epsilon[w_c]
                     
                 print("Xp:" + str(p) + " g:[" + str(g[0]) + "," + str(g[1]) 
                 + "] B:[" + str(B[0][0]) + "," + str(B[0][1]) + "] e:["
                 + str(epsilon[0]) + "," + str(epsilon[1]) + "]")
-                total_epsilon += math.fabs(epsilon[0]) + math.fabs(epsilon[1])
+                
+                # w_c : 各クラスの識別関数gに用いる重み
+                for w_c in range(classSize):
+                    total_epsilon +=math.fabs(epsilon[w_c])
 
             elif X[p][2] == 2:
                 
                 epsilon = []
-                for w_index in range(len(W)):
-                    epsilon.append(g[w_index] - B[1][w_index])
-                    W[w_index][0] -= rho * X[p][0] * epsilon[w_index]
-                    W[w_index][1] -= rho * X[p][1] * epsilon[w_index]
+                for w_c in range(classSize):
+                    epsilon.append(g[w_c] - B[1][w_c])
+                    W[w_c][0] -= rho * X[p][0] * epsilon[w_c]
+                    W[w_c][1] -= rho * X[p][1] * epsilon[w_c]
                 
                 print("Xp:" + str(p) + " g:[" + str(g[0]) + "," + str(g[1]) 
                 + "] B:[" + str(B[1][0]) + "," + str(B[1][1]) + "] e:["
                 + str(epsilon[0]) + "," + str(epsilon[1]) + "]")
-                total_epsilon += math.fabs(epsilon[0]) + math.fabs(epsilon[1])
+                
+                for w_c in range(classSize):
+                    total_epsilon +=math.fabs(epsilon[w_c])
 
                 
         print("total_e:" + str(total_epsilon))
