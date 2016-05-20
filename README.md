@@ -24,4 +24,6 @@ widrowhoff_multi
 
 [matplotlib](http://matplotlib.org/api/index.html)
 
+[NumPy配列](http://rest-term.com/archives/2999/)
+
 
