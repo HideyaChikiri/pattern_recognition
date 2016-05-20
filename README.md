@@ -8,6 +8,8 @@ This is practice of pattern recognition.
 
 perceptron
 
+perceptron2g
+
 perceptron_multi
 
 widrowhoff
