@@ -10,7 +10,7 @@ sys.path.append("../mylibrary")
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotConfig
-import mathfunction
+import myfunction
 import scipy.misc as scm
 
 # 識別関数の描画
@@ -20,7 +20,7 @@ def showGfunction(color, classIndex):
     plt.plot(x, y, c=color, linewidth=1.0, linestyle="-", label = "g(" + str(classIndex) + ")")
     plt.legend(loc="lower left")
     
-
+# 交点とｘ軸の線分を表示(それぞれ2重に線を引いてるからあんまよくない)
 def showToXaxisFromIntersection(color, classSize):
     for i in range(classSize):
         for j in range(classSize):
@@ -34,18 +34,17 @@ def showFeatureSpace(X, W , rho):
     plt.figure()
     filename = "feature(" + str(W) + "," + str(rho) + ")multi.png"
     
-    print("==================")
-    
+    print("======================================================================")
     classSize = len(W)
     canContinue = True
     
     for i in range(len(X)):
-        if X[i][2] == 1:
+        if B[i] == 1:
             plt.scatter(X[i][1], 0, c = 'green', s = 50, marker = "o")
-        elif X[i][2] == 2:
+        elif B[i] == 2:
             plt.scatter(X[i][1], 0, c = 'yellow', s= 50, marker = "s")
-        elif X[i][2] == 3:
-            plt.scatter(X[i][1], 0, c = 'orange', s= 50, marker = "x")
+        elif B[i] == 3:
+            plt.scatter(X[i][1], 0, c = 'blue', s= 50, marker = "x")
     
     while canContinue:
         canContinue = False
@@ -55,19 +54,17 @@ def showFeatureSpace(X, W , rho):
             
             g = []
             for c in range(classSize):
-                g.append(mathfunction.g(X[i], W[c]))
+                g.append(myfunction.g(X[i], W[c]))
             
             maxClass = np.nanargmax(g) + 1
-            rightClass = X[i][2]
+            rightClass = B[i]
             
             print g
             if maxClass != rightClass:
                 print str(rightClass) + "→" + str(maxClass)
-                W[rightClass-1][0] += rho * X[i][0]
-                W[rightClass-1][1] += rho * X[i][1]
-                
-                W[maxClass-1][0] -= rho * X[i][0]
-                W[maxClass-1][1] -= rho * X[i][1]
+                # 行列計算でコンパクトに
+                W[rightClass-1] += rho * X[i]
+                W[maxClass-1] -= rho * X[i]
                 
                 canContinue = True
                 cntIncorrectClass += 1
@@ -77,29 +74,36 @@ def showFeatureSpace(X, W , rho):
     # 学習後識別関数の表示
     showGfunction("green",1)
     showGfunction("yellow",2)
-    showGfunction("orange",3)
+    showGfunction("blue",3)
     
-    showToXaxisFromIntersection("blue", classSize)
+    showToXaxisFromIntersection("red", classSize)
     matplotConfig.forFeature(filename, 0)
     plt.savefig(filename) #CUIでshowは使えない
 
 if __name__ == '__main__':
     
     # 初期値
-    # X = [[1.0, 1.2, 1], [1.0, 0.2, 1], [1.0, -0.2, 1],
-    #     [1.0, -0.5, 2], [1.0, -1.0, 2], [1.0, -1.5, 2]]
-    X = [[1.0, 1.2, 1], [1.0, 0.2, 1], [1.0, -0.2, 1],[1.0, 1.5, 1],
-        [1.0, -0.5, 2], [1.0, -1.0, 2], [1.0, -1.5, 2],
-        [1.0, -1.63, 3], [1.0, -1.7, 3]]
+    X = [np.array([1.0, 1.2]), np.array([1.0, 0.2]), np.array([1.0, -0.2]),np.array([1.0, 1.5]),
+        np.array([1.0, -0.5]), np.array([1.0, -1.0]), np.array([1.0, -1.5]),
+        np.array([1.0, -1.63]), np.array([1.0, -1.7])]
         
-    W = [[-7.0, 2.0],[3.0, -2.0],[10.0, -9.1]]
+    # 教師
+    B = [1, 1, 1, 1, 2, 2, 2, 3, 3]
+        
+    W = [np.array([-7.0, 2.0]),
+        np.array([3.0, -2.0]),
+        np.array([10.0, -9.1])]
     rho = 3.6
     showFeatureSpace(X, W, rho)
     
-    W = [[-7.0, 2.0],[3.0, -2.0],[1.0, 1,0]]
-    row = 1.2
-    showFeatureSpace(X, W, row)
+    W = [np.array([-7.0, 2.0]),
+        np.array([3.0, -2.0]),
+        np.array([1.0, 1.0])]
+    rho = 1.2
+    showFeatureSpace(X, W, rho)
     
-    W = [[11.0, 5.0],[2.1, 3.9],[-5.0, -5.0]]
-    row = 2.0
-    showFeatureSpace(X, W, row)
+    W = [np.array([11.0, 5.0]),
+        np.array([2.1, 3.9]),
+        np.array([-5.0, -5.0])]
+    rho = 2.0
+    showFeatureSpace(X, W, rho)
