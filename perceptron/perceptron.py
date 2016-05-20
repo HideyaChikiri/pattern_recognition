@@ -102,7 +102,7 @@ def showFeatureSpace(X, W , row):
     # 学習後識別関数の表示
     showGfunction("black")
     
-    matplotConfig.forFeature(filename)
+    matplotConfig.forFeature(filename, -2)
     plt.savefig(filename) #CUIでshowは使えない
 
 if __name__ == '__main__':

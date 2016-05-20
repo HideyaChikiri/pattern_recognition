@@ -7,11 +7,10 @@ import numpy as np
 import mathfunction
 import math
 
-# 特徴空間表示
 def widrowhoff():
     
     classSize = len(B)
-    epoch = 10
+    epoch = 100
     for i in range(epoch):
         print("---"+ str(i+1) + "th---")
         
@@ -31,7 +30,6 @@ def widrowhoff():
                     W[w_c][0] -= rho * X[p][0] * epsilon[w_c]
                     W[w_c][1] -= rho * X[p][1] * epsilon[w_c]
                     
-                
                 g_str = ""
                 B_str = ""
                 e_str = ""
@@ -56,11 +54,6 @@ def widrowhoff():
                     W[w_c][0] -= rho * X[p][0] * epsilon[w_c]
                     W[w_c][1] -= rho * X[p][1] * epsilon[w_c]
                 
-                # print("Xp:" + str(p) + " g:[" + str(g[0]) + "," + str(g[1]) 
-                # + "] B:[" + str(B[1][0]) + "," + str(B[1][1]) + "] e:["
-                # + str(epsilon[0]) + "," + str(epsilon[1]) + "]")
-                
-                
                 g_str = ""
                 B_str = ""
                 e_str = ""
@@ -84,11 +77,6 @@ def widrowhoff():
                     epsilon.append(g[w_c] - B[2][w_c])
                     W[w_c][0] -= rho * X[p][0] * epsilon[w_c]
                     W[w_c][1] -= rho * X[p][1] * epsilon[w_c]
-                
-                # print("Xp:" + str(p) + " g:[" + str(g[0]) + "," + str(g[1]) 
-                # + "] B:[" + str(B[2][0]) + "," + str(B[2][1]) + "] e:["
-                # + str(epsilon[0]) + "," + str(epsilon[1]) + "]")
-                
                 
                 g_str = ""
                 B_str = ""
@@ -120,7 +108,7 @@ if __name__ == '__main__':
         
     W = [[-7.0, 2.0], [6.0, 3.0], [1.0, -2.0]] #W0, W1
     # W = [[-7.0, 2.0], [6.0, 3.0]] #W0, W1
-    rho = 0.1
+    rho = 0.01
     
     # 教師ベクトル
     B = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]

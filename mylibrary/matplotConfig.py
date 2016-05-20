@@ -21,7 +21,7 @@ def forWeight(filename):
         label.set_fontsize(16)
         label.set_bbox(dict(facecolor='white', edgecolor='None', alpha=0.65))
 
-def forFeature(filename):
+def forFeature(filename, l_x):
     # xy軸(spine)の移動
     ax = plt.gca()  # gca stands for 'get current axis'
     ax.spines['right'].set_color('none')
@@ -29,7 +29,7 @@ def forFeature(filename):
     ax.xaxis.set_ticks_position('bottom')
     ax.spines['bottom'].set_position(('data',0))
     ax.yaxis.set_ticks_position('left')
-    ax.spines['left'].set_position(('data',-2))
+    ax.spines['left'].set_position(('data', l_x))
     # ax.spines['left'].set_color('none')
     
     ax.set_title(filename)
