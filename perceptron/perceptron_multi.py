@@ -20,6 +20,15 @@ def showGfunction(color, classIndex):
     plt.plot(x, y, c=color, linewidth=1.0, linestyle="-", label = "g(" + str(classIndex) + ")")
     plt.legend(loc="lower left")
     
+
+def showToXaxisFromIntersection(color, classSize):
+    for i in range(classSize):
+        for j in range(classSize):
+            if i != j:
+                intersection_x = (W[i][0] - W[j][0]) / (W[j][1] - W[i][1])
+                intersection_y = (W[j][1]*W[i][0] - W[i][1]*W[j][0]) / (W[j][1] - W[i][1])
+                plt.plot([intersection_x, intersection_x],[0, intersection_y], color = color, linewidth = 1, linestyle = ':')
+    
 # 特徴空間表示
 def showFeatureSpace(X, W , rho):
     plt.figure()
@@ -70,23 +79,7 @@ def showFeatureSpace(X, W , rho):
     showGfunction("yellow",2)
     showGfunction("orange",3)
     
-    print(scm.comb(classSize, 2))
-    
-    for i in range(classSize):
-        for j in range(classSize):
-            if i != j:
-                intersection_x = (W[i][0] - W[j][0]) / (W[j][1] - W[i][1])
-                intersection_y = (W[j][1]*W[i][0] - W[i][1]*W[j][0]) / (W[j][1] - W[i][1])
-                plt.plot([intersection_x, intersection_x],[0, intersection_y], color = "blue", linewidth = 2, linestyle = '--')
-    
-    
-    # intersection_x = (W[0][0] - W[1][0]) / (W[1][1] - W[0][1])
-    # intersection_y = (W[1][1]*W[0][0] - W[0][1]*W[1][0]) / (W[1][1] - W[0][1])
-    
-    # plt.plot([intersection_x, intersection_x],[0, intersection_y], color = "blue", linewidth = 2, linestyle = '--')
-    
-    
-    
+    showToXaxisFromIntersection("blue", classSize)
     matplotConfig.forFeature(filename, 0)
     plt.savefig(filename) #CUIでshowは使えない
 
