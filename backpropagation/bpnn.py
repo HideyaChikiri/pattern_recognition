@@ -27,6 +27,7 @@ def dsigmoid(y):
 
 class NN:
     def __init__(self, ni, nh, no):
+        print "==============init==============="
         # number of input, hidden, and output nodes
         self.ni = ni + 1 # +1 for bias node
         self.nh = nh
@@ -40,6 +41,10 @@ class NN:
         # create weights
         self.wi = makeMatrix(self.ni, self.nh)
         self.wo = makeMatrix(self.nh, self.no)
+        
+        print("wi : " + str(self.wi))
+        print("wo : " + str(self.wo))
+        
         # set them to random vaules
         for i in range(self.ni):
             for j in range(self.nh):
@@ -48,11 +53,18 @@ class NN:
             for k in range(self.no):
                 self.wo[j][k] = rand(-2.0, 2.0)
 
+        print("wi : " + str(self.wi))
+        print("wo : " + str(self.wo))
+
         # last change in weights for momentum   
         self.ci = makeMatrix(self.ni, self.nh)
         self.co = makeMatrix(self.nh, self.no)
+        
+        print("ci : " + str(self.ci))
+        print("co : " + str(self.co))
 
     def update(self, inputs):
+        print "==============update==============="
         if len(inputs) != self.ni-1:
             raise ValueError('wrong number of inputs')
 
@@ -79,15 +91,17 @@ class NN:
 
 
     def backPropagate(self, targets, N, M):
+        print "==============back==============="
         if len(targets) != self.no:
             raise ValueError('wrong number of target values')
 
         # calculate error terms for output
         output_deltas = [0.0] * self.no
+        
         for k in range(self.no):
             error = targets[k]-self.ao[k]
             output_deltas[k] = dsigmoid(self.ao[k]) * error
-
+            
         # calculate error terms for hidden
         hidden_deltas = [0.0] * self.nh
         for j in range(self.nh):
@@ -95,7 +109,7 @@ class NN:
             for k in range(self.no):
                 error = error + output_deltas[k]*self.wo[j][k]
             hidden_deltas[j] = dsigmoid(self.ah[j]) * error
-
+        
         # update output weights
         for j in range(self.nh):
             for k in range(self.no):
@@ -131,14 +145,15 @@ class NN:
         for j in range(self.nh):
             print(self.wo[j])
 
-    def train(self, patterns, iterations=1000, N=0.5, M=0.1):
+    def train(self, patterns, iterations, N=0.5, M=0.1):
         # N: learning rate
         # M: momentum factor
+        print patterns
         for i in range(iterations):
             error = 0.0
             for p in patterns:
                 inputs = p[0]
-                targets = p[1]
+                targets = p[1] 
                 self.update(inputs)
                 error = error + self.backPropagate(targets, N, M)
             if i % 100 == 0:
@@ -147,19 +162,21 @@ class NN:
 
 def demo():
     # Teach network XOR function
-    pat = [
+    pattrns = [
         [[0,0], [0]],
         [[0,1], [1]],
         [[1,0], [1]],
         [[1,1], [0]]
     ]
+    
+    iterations = 3
 
     # create a network with two input, two hidden, and one output nodes
     n = NN(2, 2, 1)
     # train it with some patterns
-    n.train(pat)
+    n.train(pattrns, iterations)
     # test it
-    n.test(pat)
+    n.test(pattrns)
 
 if __name__ == '__main__':
     demo()
