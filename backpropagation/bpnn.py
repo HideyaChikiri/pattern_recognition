@@ -3,6 +3,7 @@
 import math
 import random
 import string
+# import numpy as np
 
 random.seed(0)
 
@@ -17,13 +18,13 @@ def makeMatrix(I, J, fill=0.0):
         m.append([fill]*J)
     return m
 
-# our sigmoid function, tanh is a little nicer than the standard 1/(1+e^-x)
 def sigmoid(x):
     return math.tanh(x)
+    # return 1.0/(1.0 + math.e**(-x))
 
-# derivative of our sigmoid function, in terms of the output (i.e. y)
-def dsigmoid(y):
-    return 1.0 - y**2
+def dsigmoid(x):
+    return 1.0 - x**2
+    # return sigmoid(x)*(1.0-sigmoid(x))
 
 class NN:
     def __init__(self, ni, nh, no):
@@ -64,7 +65,6 @@ class NN:
         print("co : " + str(self.co))
 
     def update(self, inputs):
-        print "==============update==============="
         if len(inputs) != self.ni-1:
             raise ValueError('wrong number of inputs')
 
@@ -90,8 +90,7 @@ class NN:
         return self.ao[:]
 
 
-    def backPropagate(self, targets, N, M):
-        print "==============back==============="
+    def backPropagate(self, targets, rho):
         if len(targets) != self.no:
             raise ValueError('wrong number of target values')
 
@@ -99,7 +98,7 @@ class NN:
         output_deltas = [0.0] * self.no
         
         for k in range(self.no):
-            error = targets[k]-self.ao[k]
+            error = self.ao[k] - targets[k]
             output_deltas[k] = dsigmoid(self.ao[k]) * error
             
         # calculate error terms for hidden
@@ -107,56 +106,54 @@ class NN:
         for j in range(self.nh):
             error = 0.0
             for k in range(self.no):
-                error = error + output_deltas[k]*self.wo[j][k]
+                error += output_deltas[k]*self.wo[j][k]
             hidden_deltas[j] = dsigmoid(self.ah[j]) * error
         
         # update output weights
         for j in range(self.nh):
             for k in range(self.no):
                 change = output_deltas[k]*self.ah[j]
-                self.wo[j][k] = self.wo[j][k] + N*change + M*self.co[j][k]
+                self.wo[j][k] -= rho*change
                 self.co[j][k] = change
-                #print N*change, M*self.co[j][k]
 
         # update input weights
         for i in range(self.ni):
             for j in range(self.nh):
                 change = hidden_deltas[j]*self.ai[i]
-                self.wi[i][j] = self.wi[i][j] + N*change + M*self.ci[i][j]
+                self.wi[i][j] -= rho*change
                 self.ci[i][j] = change
 
         # calculate error
         error = 0.0
         for k in range(len(targets)):
-            error = error + 0.5*(targets[k]-self.ao[k])**2
+            error = error + 0.5*(self.ao[k]-targets[k])**2
+            
         return error
 
-
+    # for test
     def test(self, patterns):
         for p in patterns:
             print(p[0], '->', self.update(p[0]))
 
-    def weights(self):
-        print('Input weights:')
+    # for debug
+    def printWeights(self):
+        print('\nInput weights:')
         for i in range(self.ni):
             print(self.wi[i])
-        print()
         print('Output weights:')
         for j in range(self.nh):
             print(self.wo[j])
 
-    def train(self, patterns, iterations, N=0.5, M=0.1):
-        # N: learning rate
-        # M: momentum factor
-        print patterns
-        for i in range(iterations):
+    # Stochastic Gradient Descent
+    def train(self, patterns, epoch, rho):
+        for e in range(epoch):
             error = 0.0
             for p in patterns:
                 inputs = p[0]
                 targets = p[1] 
                 self.update(inputs)
-                error = error + self.backPropagate(targets, N, M)
-            if i % 100 == 0:
+                error += self.backPropagate(targets, rho)
+            if e % 100 == 0:
                 print('error %-.5f' % error)
 
 
@@ -169,13 +166,12 @@ def demo():
         [[1,1], [0]]
     ]
     
-    iterations = 3
+    epoch = 1000
+    rho = 0.5
 
     # create a network with two input, two hidden, and one output nodes
     n = NN(2, 2, 1)
-    # train it with some patterns
-    n.train(pattrns, iterations)
-    # test it
+    n.train(pattrns, epoch, rho)
     n.test(pattrns)
 
 if __name__ == '__main__':
