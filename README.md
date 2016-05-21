@@ -14,9 +14,11 @@ perceptron_multi
 
 widrowhoff
 
+widrowhoff_multi
+
 ## Unfinished
 
-widrowhoff_multi
+backpropagation
 
 ## Reference
 

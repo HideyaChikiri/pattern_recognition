@@ -57,10 +57,11 @@ def widrowhoff():
                 
                 epsilon = []
                 for w_c in range(classSize):
-                    epsilon.append(g[w_c] - B[0][w_c])
-                    W[w_c][0] -= rho * X[p][0] * epsilon[w_c]
-                    W[w_c][1] -= rho * X[p][1] * epsilon[w_c]
-                    
+                    e = g[w_c] - B[0][w_c]
+                    W[w_c][0] -= rho * e * X[p][0]
+                    W[w_c][1] -= rho * e * X[p][1] 
+                    epsilon.append(e)
+                        
                 print("Xp:" + str(p) + " g:[" + str(g[0]) + "," + str(g[1]) 
                 + "] B:[" + str(B[0][0]) + "," + str(B[0][1]) + "] e:["
                 + str(epsilon[0]) + "," + str(epsilon[1]) + "]")
@@ -73,9 +74,10 @@ def widrowhoff():
                 
                 epsilon = []
                 for w_c in range(classSize):
-                    epsilon.append(g[w_c] - B[1][w_c])
-                    W[w_c][0] -= rho * X[p][0] * epsilon[w_c]
-                    W[w_c][1] -= rho * X[p][1] * epsilon[w_c]
+                    e = g[w_c] - B[1][w_c]
+                    W[w_c][0] -= rho * e * X[p][0]
+                    W[w_c][1] -= rho * e * X[p][1] 
+                    epsilon.append(e)
                 
                 print("Xp:" + str(p) + " g:[" + str(g[0]) + "," + str(g[1]) 
                 + "] B:[" + str(B[1][0]) + "," + str(B[1][1]) + "] e:["
