@@ -5,7 +5,7 @@ import random
 import string
 # import numpy as np
 
-random.seed(0)
+random.seed(1)
 
 # calculate a random number where:  a <= rand < b
 def rand(a, b):
@@ -20,15 +20,18 @@ def makeMatrix(I, J, fill=0.0):
 
 def sigmoid(x):
     return math.tanh(x)
-    # return 1.0/(1.0 + math.e**(-x))
+    # return 1.0/(1.0 + math.exp(-x))
+    
 
 def dsigmoid(x):
     return 1.0 - x**2
     # return sigmoid(x)*(1.0-sigmoid(x))
+    # return x*(1.0-x)
 
 class NN:
     def __init__(self, ni, nh, no):
         print "==============init==============="
+        
         # number of input, hidden, and output nodes
         self.ni = ni + 1 # +1 for bias node
         self.nh = nh
@@ -43,9 +46,6 @@ class NN:
         self.wi = makeMatrix(self.ni, self.nh)
         self.wo = makeMatrix(self.nh, self.no)
         
-        print("wi : " + str(self.wi))
-        print("wo : " + str(self.wo))
-        
         # set them to random vaules
         for i in range(self.ni):
             for j in range(self.nh):
@@ -54,23 +54,12 @@ class NN:
             for k in range(self.no):
                 self.wo[j][k] = rand(-2.0, 2.0)
 
-        print("wi : " + str(self.wi))
-        print("wo : " + str(self.wo))
-
-        # last change in weights for momentum   
-        self.ci = makeMatrix(self.ni, self.nh)
-        self.co = makeMatrix(self.nh, self.no)
-        
-        print("ci : " + str(self.ci))
-        print("co : " + str(self.co))
-
     def update(self, inputs):
         if len(inputs) != self.ni-1:
             raise ValueError('wrong number of inputs')
 
         # input activations
         for i in range(self.ni-1):
-            #self.ai[i] = sigmoid(inputs[i])
             self.ai[i] = inputs[i]
 
         # hidden activations
@@ -86,7 +75,7 @@ class NN:
             for j in range(self.nh):
                 sum = sum + self.ah[j] * self.wo[j][k]
             self.ao[k] = sigmoid(sum)
-
+            # print("ao:" + str(self.ao[k]))
         return self.ao[:]
 
 
@@ -114,14 +103,12 @@ class NN:
             for k in range(self.no):
                 change = output_deltas[k]*self.ah[j]
                 self.wo[j][k] -= rho*change
-                self.co[j][k] = change
 
         # update input weights
         for i in range(self.ni):
             for j in range(self.nh):
                 change = hidden_deltas[j]*self.ai[i]
                 self.wi[i][j] -= rho*change
-                self.ci[i][j] = change
 
         # calculate error
         error = 0.0
@@ -166,7 +153,7 @@ def demo():
         [[1,1], [0]]
     ]
     
-    epoch = 1000
+    epoch = 500
     rho = 0.5
 
     # create a network with two input, two hidden, and one output nodes
