@@ -123,11 +123,14 @@ class NN:
         for p in patterns:
             result = self.update(p[0])
             e = 0
+            e_list = []
             for i in range(len(p[1])):
-                e += p[1][i] - result[i]
-            print p[0],p[1], '->', result, 'e=',e
+                e_list.append(p[1][i] - result[i])
+                e += math.fabs(p[1][i] - result[i])
+            print p[0],p[1], '->', result, 'e=',e_list
+            print "e =", e
             total_e += e**2
-        print 'total_e', total_e
+        print 'total_e =', total_e
         
 
     # for debug
@@ -159,6 +162,7 @@ def demo():
     f = open('dataset.txt')
     line = f.readline()
     
+    # from textfile to list
     while line:
         pattern = []
         x = line.split("\t")
@@ -185,6 +189,21 @@ def demo():
         
     f.close()
     
+    # lerning 50%(odd), test 50%(enen)
+    testPatterns = []
+    p_size = len(patterns)
+    for i in range(p_size):
+        # print i
+        if i%2 == 0:
+            testPatterns.append(patterns[i])
+    
+    for i in range(p_size):
+        if i%2 == 1:
+            del patterns[(p_size-1)-i]
+    
+    # print "patterns\n",patterns
+    # print "testPatterns\n",testPatterns
+    
     epoch = 500
     rho = 0.2
     
@@ -192,6 +211,13 @@ def demo():
     n = NN(4, 3, 3)
     n.train(patterns, epoch, rho)
     n.test(patterns)
+    
+    print "=========================================="
+    print "=========================================="
+    print "=========================================="
+    print "=========================================="
+    print "=========================================="
+    n.test(testPatterns)
 
 if __name__ == '__main__':
     demo()
